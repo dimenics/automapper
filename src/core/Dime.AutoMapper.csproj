@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>Simple discovery of AutoMapper's mapping classes allowing a class per file system.</Description>
+    <Copyright>Dimenics</Copyright>
+    <AssemblyTitle>Dime.AutoMapper</AssemblyTitle>
+    <VersionPrefix>1.0.7</VersionPrefix>
+    <Authors>Dimenics</Authors>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <AssemblyName>Dime.AutoMapper</AssemblyName>
+    <PackageId>Dime.AutoMapper</PackageId>
+    <PackageIconUrl>http://dimenuget.azurewebsites.net/Images/dimenuget.png</PackageIconUrl>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <Version>1.0.12</Version>
+    <NeutralLanguage>en</NeutralLanguage>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSource>True</IncludeSource>
+    <IncludeSymbols>True</IncludeSymbols>
+    <FileVersion>1.0.12.0</FileVersion>
+    <AssemblyVersion>1.0.12.0</AssemblyVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
+  </ItemGroup>
+
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>
