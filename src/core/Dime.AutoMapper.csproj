@@ -13,7 +13,7 @@
     <AssemblyTitle>Dime.AutoMapper</AssemblyTitle>
     <VersionPrefix>1.0.7</VersionPrefix>
     <Authors>Dimenics</Authors>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.0</TargetFrameworks>
     <AssemblyName>Dime.AutoMapper</AssemblyName>
     <PackageId>Dime.AutoMapper</PackageId>
     <PackageIconUrl>http://dimenuget.azurewebsites.net/Images/dimenuget.png</PackageIconUrl>
