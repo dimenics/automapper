@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dime.AutoMapper.Tests
@@ -19,7 +20,7 @@ namespace Dime.AutoMapper.Tests
         [TestMethod]
         [TestCategory("AutoMapper")]
         public void TestAutoMapperFactoryScanning()
-        {
+        {            
             IMapper mapper = AutoMapperFactory.Create();
             mapper.ConfigurationProvider.AssertConfigurationIsValid();
         }
@@ -28,7 +29,7 @@ namespace Dime.AutoMapper.Tests
         [TestCategory("AutoMapper")]
         public void TestStaticAutoMapperFactoryScanning()
         {
-            AutoMapperFactory.Initialize();
+            //AutoMapperFactory.Initialize();
         }
     }
 }
