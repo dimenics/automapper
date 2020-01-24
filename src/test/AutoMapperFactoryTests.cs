@@ -24,12 +24,5 @@ namespace Dime.AutoMapper.Tests
             IMapper mapper = AutoMapperFactory.Create();
             mapper.ConfigurationProvider.AssertConfigurationIsValid();
         }
-
-        [TestMethod]
-        [TestCategory("AutoMapper")]
-        public void TestStaticAutoMapperFactoryScanning()
-        {
-            //AutoMapperFactory.Initialize();
-        }
     }
 }

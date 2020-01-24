@@ -10,7 +10,6 @@ namespace Dime.AutoMapper.Tests
         [AssemblyInitialize]
         public static void AssemblyInit(TestContext context)
         {
-            AutoMapperFactory.Initialize();
         }
 
         [TestInitialize]
@@ -23,30 +22,8 @@ namespace Dime.AutoMapper.Tests
         public void TestClassModelUsingInstance()
         {
             IMapper mapper = AutoMapperFactory.Create();
-            TestClassOne instance1 = new TestClassOne() { Id = 2 };
+            TestClassOne instance1 = new TestClassOne { Id = 2 };
             TestClassTwo instance2 = mapper.Map<TestClassTwo>(instance1);
-
-            Assert.IsNotNull(instance2);
-            Assert.AreEqual(instance2.Id, 2);
-        }
-
-        [TestMethod]
-        [TestCategory("AutoMapper")]
-        public void TestClassModelUsingStatic()
-        {
-            TestClassOne instance1 = new TestClassOne() { Id = 2 };
-            TestClassTwo instance2 = Mapper.Map<TestClassTwo>(instance1);
-
-            Assert.IsNotNull(instance2);
-            Assert.AreEqual(instance2.Id, 2);
-        }
-
-        [TestMethod]
-        [TestCategory("AutoMapper")]
-        public void TestClassModelOtherAssemblyUsingStatic()
-        {
-            TestClassFour instance1 = new TestClassFour() { Id = 2 };
-            TestClassThree instance2 = Mapper.Map<TestClassThree>(instance1);
 
             Assert.IsNotNull(instance2);
             Assert.AreEqual(instance2.Id, 2);
@@ -57,7 +34,7 @@ namespace Dime.AutoMapper.Tests
         public void TestClassModelOtherAssemblyUsingInstance()
         {
             IMapper mapper = AutoMapperFactory.Create();
-            TestClassFour instance1 = new TestClassFour() { Id = 2 };
+            TestClassFour instance1 = new TestClassFour { Id = 2 };
             TestClassThree instance2 = mapper.Map<TestClassThree>(instance1);
 
             Assert.IsNotNull(instance2);

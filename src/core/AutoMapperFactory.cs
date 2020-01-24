@@ -10,6 +10,7 @@ namespace AutoMapper
     /// Scanner that looks for all implementations of the <seealso cref="IAutoMapper"/> interface
     /// and consequently initializes the mappings
     /// </summary>
+    [Obsolete("This package is deprecated. Use AutoMapper's own API instead.")]
     public static class AutoMapperFactory
     {
         /// <summary>
@@ -30,20 +31,8 @@ namespace AutoMapper
             }
             catch (ReflectionTypeLoadException loaderException)
             {
-                throw MapperExceptionFactory.Throw(loaderException);
+                throw loaderException.Throw();
             }
-        }
-
-        /// <summary>
-        /// Scans the assemblies of the AppDomain for implementations of the <seealso cref="IAutoMapper"/> interface
-        /// and includes them in the construction of the AutoMapper.
-        /// </summary>
-        /// <returns></returns>
-        public static void Initialize(bool eagerLoadAssemblies = false)
-        {
-            Action<IMapperConfigurationExpression> mappingConfiguration = eagerLoadAssemblies ? ScanAllAssemblies() : ScanAssemblies();
-            if (mappingConfiguration != default(Action<IMapperConfigurationExpression>))
-                Mapper.Initialize(mappingConfiguration);
         }
 
         /// <summary>
@@ -54,7 +43,9 @@ namespace AutoMapper
         {
             // The IAutoMapper interface is what we're looking for in the assemblies
             Type iMapperType = typeof(IAutoMapper);
-            IEnumerable<Type> mapperClasses = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetLoadableTypes()
+            IEnumerable<Type> mapperClasses = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .SelectMany(x => x.GetLoadableTypes()
                 .Where(y => iMapperType.IsAssignableFrom(y) && !y.IsAbstract && y.IsClass));
 
             // For each implementation of the interface we invoke the Configure method - which returns an Action<IMapperConfigurationExpression>
@@ -63,19 +54,15 @@ namespace AutoMapper
             {
                 object mapperObject = Activator.CreateInstance(type);
                 MethodInfo method = type.GetMethod(nameof(IAutoMapper.Configure), BindingFlags.Public | BindingFlags.Instance);
-                if (method != null)
-                {
-                    if (method.Invoke(mapperObject, null) is Action<IMapperConfigurationExpression> returnValue)
-                        configurators.Add(returnValue);
-                }
+                if (method == null) 
+                    continue;
+
+                if (method.Invoke(mapperObject, null) is Action<IMapperConfigurationExpression> returnValue)
+                    configurators.Add(returnValue);
             }
 
             // Concatenate the expressions
-            Action<IMapperConfigurationExpression> action = null;
-            foreach (Action<IMapperConfigurationExpression> configurator in configurators)
-                action += configurator;
-
-            return action;
+            return configurators.Aggregate<Action<IMapperConfigurationExpression>, Action<IMapperConfigurationExpression>>(null, (current, configurator) => current + configurator);
         }
 
         /// <summary>
@@ -93,18 +80,14 @@ namespace AutoMapper
             {
                 object mapperObject = Activator.CreateInstance(type);
                 MethodInfo method = type.GetMethod(nameof(IAutoMapper.Configure), BindingFlags.Public | BindingFlags.Instance);
-                if (method != null)
-                {
-                    if (method.Invoke(mapperObject, null) is Action<IMapperConfigurationExpression> returnValue)
-                        configurators.Add(returnValue);
-                }
+                if (method == null)
+                    continue;
+
+                if (method.Invoke(mapperObject, null) is Action<IMapperConfigurationExpression> returnValue)
+                    configurators.Add(returnValue);
             }
 
-            Action<IMapperConfigurationExpression> action = null;
-            foreach (Action<IMapperConfigurationExpression> singleAction in configurators)
-                action += singleAction;
-
-            return action;
+            return configurators.Aggregate<Action<IMapperConfigurationExpression>, Action<IMapperConfigurationExpression>>(null, (current, singleAction) => current + singleAction);
         }
 
         /// <summary>
@@ -133,7 +116,7 @@ namespace AutoMapper
         /// <returns></returns>
         private static IEnumerable<Assembly> GetAllAssembliesEagerly(Assembly assembly)
         {
-            AssemblyName[] referencedAssemblies = assembly.GetReferencedAssemblies() ?? new AssemblyName[0];
+            AssemblyName[] referencedAssemblies = assembly.GetReferencedAssemblies();
             foreach (AssemblyName referencedAssembly in referencedAssemblies)
             {
                 Assembly loadedAssembly = null;
