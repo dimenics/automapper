@@ -5,6 +5,7 @@ namespace AutoMapper
     /// <summary>
     ///
     /// </summary>
+    [Obsolete("Switch to Automapper 9.x.x and use AutoMapper.Profile instead of IAutoMapper")]
     public class MapperException : Exception
     {
         /// <summary>

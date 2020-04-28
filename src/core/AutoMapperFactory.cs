@@ -10,6 +10,7 @@ namespace AutoMapper
     /// Scanner that looks for all implementations of the <seealso cref="IAutoMapper"/> interface
     /// and consequently initializes the mappings
     /// </summary>
+    [Obsolete("Switch to Automapper 9.x.x and use AutoMapper.Profile instead of IAutoMapper")]
     public static class AutoMapperFactory
     {
         /// <summary>
@@ -79,11 +80,11 @@ namespace AutoMapper
             {
                 object mapperObject = Activator.CreateInstance(type);
                 MethodInfo method = type.GetMethod(nameof(IAutoMapper.Configure), BindingFlags.Public | BindingFlags.Instance);
-                if (method != null)
-                {
-                    if (method.Invoke(mapperObject, null) is Action<IMapperConfigurationExpression> returnValue)
-                        configurators.Add(returnValue);
-                }
+                if (method == null) 
+                    continue;
+
+                if (method.Invoke(mapperObject, null) is Action<IMapperConfigurationExpression> returnValue)
+                    configurators.Add(returnValue);
             }
 
             // Concatenate the expressions
