@@ -23,7 +23,7 @@ namespace AutoMapper
             try
             {
                 // Get the expressions
-                Action<IMapperConfigurationExpression> action = eagerLoadAssemblies ? ScanAllAssemblies(new List<string>()) : ScanAssemblies(new List<string>());
+                Action<IMapperConfigurationExpression> action = eagerLoadAssemblies ? ScanAllAssemblies() : ScanAssemblies();
 
                 // Initialize auto mapper
                 MapperConfiguration mapper = new MapperConfiguration(action);
@@ -31,48 +31,22 @@ namespace AutoMapper
             }
             catch (ReflectionTypeLoadException loaderException)
             {
-                throw MapperExceptionFactory.Throw(loaderException);
+                throw loaderException.Throw();
             }
-        }
-
-        /// <summary>
-        /// Scans the assemblies of the AppDomain for implementations of the <seealso cref="IAutoMapper"/> interface
-        /// and includes them in the construction of the AutoMapper.
-        /// </summary>
-        /// <returns></returns>
-        public static void Initialize(bool eagerLoadAssemblies = false)
-            => Initialize(eagerLoadAssemblies, new List<string>());
-
-        /// <summary>
-        /// Scans the assemblies of the AppDomain for implementations of the <seealso cref="IAutoMapper"/> interface
-        /// and includes them in the construction of the AutoMapper.
-        /// </summary>
-        /// <returns></returns>
-        public static void Initialize(bool eagerLoadAssemblies, IEnumerable<string> assembliesToIgnore)
-        {
-            Action<IMapperConfigurationExpression> mappingConfiguration = eagerLoadAssemblies ? ScanAllAssemblies(assembliesToIgnore) : ScanAssemblies(assembliesToIgnore);
-            if (mappingConfiguration != default(Action<IMapperConfigurationExpression>))
-                Mapper.Initialize(mappingConfiguration);
         }
 
         /// <summary>
         ///
         /// </summary>
         /// <returns></returns>
-        private static Action<IMapperConfigurationExpression> ScanAssemblies(IEnumerable<string> assembliesToIgnore)
+        private static Action<IMapperConfigurationExpression> ScanAssemblies()
         {
             // The IAutoMapper interface is what we're looking for in the assemblies
             Type iMapperType = typeof(IAutoMapper);
             IEnumerable<Type> mapperClasses = AppDomain.CurrentDomain
                 .GetAssemblies()
-                .Where(x =>
-                {
-                    string assemblyName = x.GetName().Name;
-                    return assembliesToIgnore.All(y => !assemblyName.Contains(y));
-                })
                 .SelectMany(x => x.GetLoadableTypes()
-                .Where(y => iMapperType.IsAssignableFrom(y) && !y.IsAbstract && y.IsClass))
-                .ToList();
+                .Where(y => iMapperType.IsAssignableFrom(y) && !y.IsAbstract && y.IsClass));
 
             // For each implementation of the interface we invoke the Configure method - which returns an Action<IMapperConfigurationExpression>
             List<Action<IMapperConfigurationExpression>> configurators = new List<Action<IMapperConfigurationExpression>>();
@@ -80,7 +54,7 @@ namespace AutoMapper
             {
                 object mapperObject = Activator.CreateInstance(type);
                 MethodInfo method = type.GetMethod(nameof(IAutoMapper.Configure), BindingFlags.Public | BindingFlags.Instance);
-                if (method == null) 
+                if (method == null)
                     continue;
 
                 if (method.Invoke(mapperObject, null) is Action<IMapperConfigurationExpression> returnValue)
@@ -88,21 +62,17 @@ namespace AutoMapper
             }
 
             // Concatenate the expressions
-            Action<IMapperConfigurationExpression> action = null;
-            foreach (Action<IMapperConfigurationExpression> configurator in configurators)
-                action += configurator;
-
-            return action;
+            return configurators.Aggregate<Action<IMapperConfigurationExpression>, Action<IMapperConfigurationExpression>>(null, (current, configurator) => current + configurator);
         }
 
         /// <summary>
         ///
         /// </summary>
         /// <returns></returns>
-        private static Action<IMapperConfigurationExpression> ScanAllAssemblies(IEnumerable<string> assembliesToIgnore)
+        private static Action<IMapperConfigurationExpression> ScanAllAssemblies()
         {
             Type iMapperType = typeof(IAutoMapper);
-            IEnumerable<Type> mapperClasses = GetAllAssemblies(assembliesToIgnore).SelectMany(x => x.GetTypes()
+            IEnumerable<Type> mapperClasses = GetAllAssemblies().SelectMany(x => x.GetTypes()
                 .Where(y => iMapperType.IsAssignableFrom(y) && !y.IsAbstract && y.IsClass));
 
             List<Action<IMapperConfigurationExpression>> configurators = new List<Action<IMapperConfigurationExpression>>();
@@ -124,18 +94,10 @@ namespace AutoMapper
         ///
         /// </summary>
         /// <returns></returns>
-        private static IEnumerable<Assembly> GetAllAssemblies(IEnumerable<string> assembliesToIgnore)
+        private static IEnumerable<Assembly> GetAllAssemblies()
         {
             // Start with the current domain's assembly
-            IEnumerable<Assembly> currentDomainAssemblies = AppDomain.CurrentDomain
-                .GetAssemblies()
-                .Where(x =>
-                {
-                    string assemblyName = x.GetName().Name;
-                    return assembliesToIgnore.All(y => !assemblyName.Contains(y));
-                })
-                .ToList();
-
+            Assembly[] currentDomainAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly assembly in currentDomainAssemblies)
             {
                 // Fetch the referenced assemblies for the current assembly
@@ -154,7 +116,7 @@ namespace AutoMapper
         /// <returns></returns>
         private static IEnumerable<Assembly> GetAllAssembliesEagerly(Assembly assembly)
         {
-            AssemblyName[] referencedAssemblies = assembly.GetReferencedAssemblies() ?? new AssemblyName[0];
+            AssemblyName[] referencedAssemblies = assembly.GetReferencedAssemblies();
             foreach (AssemblyName referencedAssembly in referencedAssemblies)
             {
                 Assembly loadedAssembly = null;

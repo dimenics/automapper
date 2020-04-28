@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup Label="Globals">
     <SccProjectName>SAK</SccProjectName>
     <SccProvider>SAK</SccProvider>
@@ -11,34 +10,34 @@
     <Description>Simple discovery of AutoMapper's mapping classes allowing a class per file system.</Description>
     <Copyright>Copyright © 2020</Copyright>
     <AssemblyTitle>Dime.AutoMapper</AssemblyTitle>
-    <VersionPrefix>1.1.0</VersionPrefix>
     <Authors>Dimenics</Authors>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <AssemblyName>Dime.AutoMapper</AssemblyName>
     <PackageId>Dime.AutoMapper</PackageId>
     <PackageIconUrl>http://dimenuget.azurewebsites.net/Images/dimenuget.png</PackageIconUrl>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>1.2.4</Version>
-    <NeutralLanguage>en</NeutralLanguage>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <IncludeSource>True</IncludeSource>
-    <IncludeSymbols>True</IncludeSymbols>
     <FileVersion>1.2.4.0</FileVersion>
     <AssemblyVersion>1.2.4.0</AssemblyVersion>
-    <PackageReleaseNotes>Upgrade AutoMapper to 8.1.1.
-Deprecated this library as AutoMapper 9.0.0 achieves the same thing.</PackageReleaseNotes>
-    <PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
+    <IncludeSource>True</IncludeSource>
+    <IncludeSymbols>True</IncludeSymbols>
+    <PackageReleaseNotes>
+      Upgrade AutoMapper to 8.1.1.
+      Deprecated this library as AutoMapper 9.0.0 achieves the same thing.
+    </PackageReleaseNotes>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Automapper</PackageTags>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.1.1" />
   </ItemGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+  </ItemGroup>
 </Project>
