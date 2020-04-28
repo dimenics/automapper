@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Dime.AutoMapper.Tests.Models;
-using System;
 
 namespace Dime.AutoMapper.Tests.Mappers
 {

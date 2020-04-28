@@ -8,11 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-<<<<<<< HEAD
     <TargetFrameworks>netcoreapp2.2</TargetFrameworks>
-=======
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
->>>>>>> 40b8a8dcff34680c771f73ac6a3933a6678957ec
     <DebugType>portable</DebugType>
     <AssemblyName>Dime.AutoMapper.Tests</AssemblyName>
     <OutputType>Library</OutputType>
