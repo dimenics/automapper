@@ -1,8 +1,6 @@
 # Dime.Automapper
 
-[![Build Status](https://dev.azure.com/dimenicsbe/Utilities/_apis/build/status/AutoMapper%20-%20MAIN%20-%20CI?branchName=master)](https://dev.azure.com/dimenicsbe/Utilities/_build/latest?definitionId=69&branchName=master) [![Dime.AutoMapper package in Dime.Scheduler feed in Azure Artifacts](https://feeds.dev.azure.com/dimenicsbe/_apis/public/Packaging/Feeds/a7b896fd-9cd8-4291-afe1-f223483d87f0/Packages/da2ca1af-89ef-49ff-b518-74ca3e5df853/Badge)](https://dev.azure.com/dimenicsbe/Utilities/_packaging?_a=package&feed=a7b896fd-9cd8-4291-afe1-f223483d87f0&package=da2ca1af-89ef-49ff-b518-74ca3e5df853&preferRelease=true)
-
-This project is no longer being maintained.
+[![Build Status](https://dev.azure.com/dimenicsbe/Utilities/_apis/build/status/AutoMapper%20-%20MAIN%20-%20CI?branchName=master)](https://dev.azure.com/dimenicsbe/Utilities/_build/latest?definitionId=69&branchName=master) [![Dime.AutoMapper package in Dime.Scheduler feed in Azure Artifacts](https://feeds.dev.azure.com/dimenicsbe/_apis/public/Packaging/Feeds/a7b896fd-9cd8-4291-afe1-f223483d87f0/Packages/da2ca1af-89ef-49ff-b518-74ca3e5df853/Badge)](https://dev.azure.com/dimenicsbe/Utilities/_packaging?_a=package&feed=a7b896fd-9cd8-4291-afe1-f223483d87f0&package=da2ca1af-89ef-49ff-b518-74ca3e5df853&preferRelease=true) ![No Maintenance Intended](http://unmaintain.tech/badge.svg)
 
 ## Introduction
 
